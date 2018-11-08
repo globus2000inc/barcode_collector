@@ -1,0 +1,10 @@
+{
+    "srvHost": "http://<ip_addr>:8080/",
+    "db_con": {
+        "host": "127.0.0.1",
+        "port": "3306",
+        "database": "",
+        "user": "",
+        "password": ""
+    }
+}

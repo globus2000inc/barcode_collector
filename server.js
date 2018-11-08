@@ -1,19 +1,11 @@
-const srvHost = 'http://10.1.0.113:8080/';
-
+const config = require('./config.json');
 var express = require('express');
 var mysql = require('mysql');
 var qr = require('qr-image');
 
-
 var server = express();
-var dbClient = mysql.createConnection({
-    host: '127.0.0.1',
-    port: '3306',
-    database: 'barcode_register',
-    user: 'barcode_reg_user',
-    password: 'VOu2D8uadVXiNOia'
-});
 
+let dbClient = mysql.createConnection(config.db_con);
 
 var bodyParser = require('body-parser');
 
@@ -87,12 +79,13 @@ server.delete('/barcodes/delete/:masterkey', function (req, res) {
 server.get('/new/upload', function (req, res) {
     console.log(req.headers['access-key']);
     let accessKey = req.headers['access-key'];
+    console.log(accessKey);
 
     dbClient.query('SELECT * FROM store_keys WHERE user_key="' + accessKey +'" LIMIT 1', function (error, result) {
         console.log(result);
         if (!error) {
             if (result.length > 0) {
-                var link = srvHost + 'upload/' + accessKey;
+                var link = config.srvHost + 'upload/' + accessKey;
                 var code = qr.image(link, { type: 'png' });
                 res.type('png');
                 code.pipe(res);
